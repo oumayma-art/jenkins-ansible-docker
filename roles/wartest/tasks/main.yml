@@ -44,8 +44,8 @@
     name: docker
     state: started
     enabled: yes
-- name: Se connecter au registre 
-  shell: docker login -u oumaymaa.ouerradi@gmail.com -p Oumayma2024
+- name: Se connecter au registre Docker avec un token d'accès personnel
+  shell: echo "glft-sVpwi5c1mxsMrfonWxUs" | docker login -u oumaymaa.ouerradi@gmail.com --password-stdin registry.gitlab.com
   ignore_errors: yes
 
 - name: run container
