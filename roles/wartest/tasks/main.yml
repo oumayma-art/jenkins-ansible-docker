@@ -44,6 +44,9 @@
     name: docker
     state: started
     enabled: yes
+- name: Se connecter au registre 
+  shell: docker login -u oumaymaa.ouerradi@gmail.com -p Oumayma2024
+  ignore_errors: yes
 
 - name: run container
   docker_container:
