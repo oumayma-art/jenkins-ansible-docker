@@ -2,6 +2,11 @@
   apt:
     name: python3-pip
     state: present
+    
+- name: Install Docker CE
+  apt:
+   name: docker-ce
+   state: present
 
 - name: pip install docker-py
   pip:
