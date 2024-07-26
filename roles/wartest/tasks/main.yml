@@ -1,23 +1,51 @@
-- name: install pip3
-  apt:
-    name: python3-pip
-    state: present
+---
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Install Docker CE
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Install pip3
+      apt:
+        name: python3-pip
+        state: present
     
-- name: Install Docker CE
-  apt:
-   name: docker-ce
-   state: present
+    - name: Install Docker SDK for Python and Docker Compose
+      pip:
+        name:
+          - docker
+          - docker-compose
+        executable: pip3
 
-- name: pip install docker-py
-  pip:
-    name:
-      - docker
-      - docker-compose
+    - name: Ensure Docker service is enabled and started
+      service:
+        name: docker
+        state: started
+        enabled: yes
 
-- name: run container
-  docker_container:
-    name: wartest
-    image: "{{ image }}"
-    ports: 8081:8080
-    state: started
- 
+    - name: Add current user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Run Docker container
+      docker_container:
+        name: wartest
+        image: "{{ image }}"
+        ports:
+          - "8081:8080"
+        state: started
